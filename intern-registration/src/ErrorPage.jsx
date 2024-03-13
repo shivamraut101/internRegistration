@@ -1,7 +1,19 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 export const ErrorPage = () => {
+    const [loading,setLoading] = useState(true)
+    const setLoadingFun = ()=>{
+        setLoading(false)
+    }
+    const loadingFunction = () =>{
+        setTimeout(setLoadingFun,1200)
+    }
+    useEffect(()=>{
+        loadingFunction()   
+    },[])
   return (
-    <div><h1>Page Not Found</h1></div>
+    <>
+    {loading ? <h1>Loading...</h1> : <h1>Page Not Found</h1>}
+    </>
   )
 }
