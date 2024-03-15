@@ -38,6 +38,7 @@ function App() {
               </PrivateRoute>
             }
           />
+          <Route path='*' element={<ErrorPage/>} />
         </Routes>
     </Layout>
   </BrowserRouter>
