@@ -15,7 +15,7 @@ router.get("/user-info/:email", async (req, res) => {
         res.json(intern.personalInfo);
         console.log(intern.personalInfo)
       } else {
-        res.status(404).json({ message: "User not found " });
+        res.status(404).json({ message: "User not found" });
       }
     } catch (error) {
       console.error("Error fetching user information:", error);
