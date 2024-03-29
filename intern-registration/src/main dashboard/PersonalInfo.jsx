@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { getStates, getWellKnownCountries } from "../util";
 import { useAuth0 } from "@auth0/auth0-react";
-import axios from "axios";
+import { useUserInfo } from "../context api/UserInfoContext";
 
 export const PersonalInfo = () => {
   const { user } = useAuth0();
+  const {userInfo,imgUrl} = useUserInfo()
   const [editMode, setEditMode] = useState(false);
   const [initialLoad, setInitialLoad] = useState(true);
   const [passportSizePhotoData, setPassportSizePhotoData] = useState(false);
@@ -72,44 +73,19 @@ export const PersonalInfo = () => {
     }
   };
 
+  // To fetch all data from personal info
   const fetchUserInfo = async () => {
     // Fetch user information from the server
     if (initialLoad) {
       try {
-        const response = await fetch(
-          `http://localhost:3000/api/user-info/${user.email}`
-        );
-        const data = await response.json();
-
         // If data exists for the user, set it to the state
-        if (data.message) {
-          console.log(data);
+        if (userInfo.message) {
+          console.log(userInfo);
         } else {
-          setInfo(data);
+          setInfo(userInfo.personalInfo);
           setEditMode(true); // Enable edit mode to show update option
-          // Fetch passport photo URL
-
-          const responseImage = await axios.get(
-            `http://localhost:3000/api/get-image/${data.passportSizePhoto}`,
-            {
-              responseType: "arraybuffer", // Ensure correct response type to handle binary data
-            }
-          );
-
-          // Convert the binary data to base64 format
-          const base64String = btoa(
-            new Uint8Array(responseImage.data).reduce(
-              (data, byte) => data + String.fromCharCode(byte),
-              ""
-            )
-          );
-
-          // Construct the image source using base64 data
-          const imageUrl = `data:image/jpeg;base64,${base64String}`;
-          setPassportSizePhotoData(imageUrl);
         }
-        // setInfo(data);
-        // setEditMode(true); // Enable edit mode to show update option
+
       } catch (error) {
         console.error("Error fetching user information:", error);
       }
@@ -162,7 +138,7 @@ export const PersonalInfo = () => {
         </div>
 
         {/* passport photo */}
-        {!passportSizePhotoData && (
+        {!editMode && (
           <div className="mb-3">
             <label htmlFor="passportSizePhoto" className="form-label">
               Passport Photo
@@ -178,13 +154,13 @@ export const PersonalInfo = () => {
           </div>
         )}
         {/* Display the image if it exists */}
-        {passportSizePhotoData && (
+        {imgUrl && (
           <div className="mb-3">
             <label>Passport Size Photo:</label>
             <img
-              src={passportSizePhotoData}
+              src={imgUrl}
               alt="passport-size"
-              style={{ maxWidth: "100%", maxHeight: "200px" }} // Set max width and height for the image
+              style={{ maxWidth: "100%", maxHeight: "138px" }} // Set max width and height for the image
             />
           </div>
         )}
