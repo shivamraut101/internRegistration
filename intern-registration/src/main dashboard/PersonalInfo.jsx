@@ -8,7 +8,6 @@ export const PersonalInfo = () => {
   const {userInfo,imgUrl} = useUserInfo()
   const [editMode, setEditMode] = useState(false);
   const [initialLoad, setInitialLoad] = useState(true);
-  const [passportSizePhotoData, setPassportSizePhotoData] = useState(false);
 
   const [info, setInfo] = useState({
     name: user.nickname,
@@ -81,7 +80,7 @@ export const PersonalInfo = () => {
         // If data exists for the user, set it to the state
         if (userInfo.message) {
           console.log(userInfo);
-        } else {
+        } else { 
           setInfo(userInfo.personalInfo);
           setEditMode(true); // Enable edit mode to show update option
         }
