@@ -164,7 +164,7 @@ const internSchema = new Schema(
   }
 );
 
-internSchema.plugin(history(options));
+// internSchema.plugin(history(options));
 
 const Intern = mongoose.model("Intern", internSchema);
 
